@@ -1,13 +1,3 @@
-## This folder will contains the Azure function code.
-
-## Note:
-
-- Before deploying, be sure to update your requirements.txt file by running `pip freeze > requirements.txt`
-- Known issue, the python package `psycopg2` does not work directly in Azure; install `psycopg2-binary` instead to use the `psycopg2` library in Azure
-
-The skelton of the `__init__.py` file will consist of the following logic:
-
-```
 import logging
 import azure.functions as func
 import psycopg2-binary
@@ -36,4 +26,3 @@ def main(msg: func.ServiceBusMessage):
         logging.error(error)
     finally:
         # TODO: Close connection
-```
