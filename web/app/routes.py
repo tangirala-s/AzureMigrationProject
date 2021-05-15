@@ -62,8 +62,10 @@ def notification():
         notification.subject = request.form['subject']
         notification.status = 'Notifications submitted'
         notification.submitted_date = datetime.utcnow()
+        logging.info("Record just created")
 
         try:
+
             db.session.add(notification)
             db.session.commit()
 
@@ -72,17 +74,10 @@ def notification():
             ## Code below will be replaced by a message queue
             #################################################
 
-            print('Notification added with subject : {} & message : {}'.format(request.form['subject'],request.form['message']))
-
             notification_id = notification.id
-            print('Adding notification : {} to the queue : {}'.format(notification_id, app.config.get('SERVICE_BUS_QUEUE_NAME')))
-            # TODO Call servicebus queue_client to enqueue notification ID
 
-            sBus_qClient = QueueClient.from_connection_string(app.config.get('SERVICE_BUS_CONNECTION_STRING'), app.config.get('SERVICE_BUS_QUEUE_NAME'))
-            message = Message(str(notification_id))
-            sBus_qClient.send(message)
-
-            print('Notification : {} added to queue : {}'.format(notification_id, app.config.get('SERVICE_BUS_QUEUE_NAME')))
+            msg = Message(str(notification_id))
+            queue_client.send(msg)
 
             #################################################
             ## END of TODO
