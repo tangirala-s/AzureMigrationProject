@@ -6,7 +6,7 @@ The TechConf website allows attendees to register for an upcoming conference. Ad
 The application is currently working but the following pain points have triggered the need for migration to Azure:
  - The web application is not scalable to handle user load at peak
  - When the admin sends out notifications, it's currently taking a long time because it's looping through all attendees, resulting in some HTTP timeout exceptions
- - The current architecture is not cost-effective 
+ - The current architecture is not cost-effective
 
 In this project, you are tasked to do the following:
 - Migrate and deploy the pre-existing web app to an Azure App Service
@@ -59,13 +59,22 @@ You will need to install the following locally:
 2. Re-deploy the web app to publish changes
 
 ## Monthly Cost Analysis
-Complete a month cost analysis of each Azure resource to give an estimate total cost using the table below:
+
+All costs were considered for the Region *West US2*. These are the costs from basic tiers for all resources, as we scale the resources, the costs will increase based on usage.
 
 | Azure Resource | Service Tier | Monthly Cost |
 | ------------ | ------------ | ------------ |
-| *Azure Postgres Database* |     |              |
-| *Azure Service Bus*   |         |              |
-| ...                   |         |              |
+| *Azure Postgres Database* | Single Server, Basic Tier, Gen 5, 1vCore, 5GB storage, no additional Backup | USD 25.32 |
+| *Azure Service Bus*   |  Basic Tier at 1M operations per month | USD 0.05 |
+| *Azure Functions* | Consumption Plan (first 400,000 GB/s and 1M executions free) | USD 0 |
+| *Azure Storage Account* | General Purpose V2, Cold Blob Storage, up to 1000GB, pas-as-you-go | USD 10 |
+| *App Service* | B1 : 1 Cores, 1.75GB RAM, 10 GB Storage | USD 13.14 |
+| *Total*| Basic Tiers | **USD 48.5**|
 
 ## Architecture Explanation
-This is a placeholder section where you can provide an explanation and reasoning for your architecture selection for both the Azure Web App and Azure Function.
+
+A modular architecture is used in developing and deploying this application. The front-end, back-end jobs and storage are effectively separated and connected robustly with each other. This help in easy upgrades and maintenance of individual components making up the whole project.
+
+Maintaining the back-end job in a separate function speeds up the front-end application in times of high traffic and ensures strong responsiveness of the application. Essentially the function app being on a consumption plan helps us only pay for what we use and manage the total cost of application.
+
+The app service plan supporting the application helps in easy scale out or scale up of the application as per user traffic needs and also to scale down and scale in when not required. This way we can control the costs of individual components of the application.
