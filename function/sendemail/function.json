@@ -6,7 +6,7 @@
       "type": "serviceBusTrigger",
       "direction": "in",
       "queueName": "notificationqueue",
-      "connection": "migrationproject_SERVICEBUS"
+      "connection": "notificationqueue_SERVICEBUS"
     }
   ]
 }

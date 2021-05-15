@@ -10,7 +10,7 @@ The skelton of the `__init__.py` file will consist of the following logic:
 ```
 import logging
 import azure.functions as func
-import psycopg2-binary
+import psycopg2
 import os
 from datetime import datetime
 from sendgrid import SendGridAPIClient
@@ -32,7 +32,7 @@ def main(msg: func.ServiceBusMessage):
 
         # TODO: Update the notification table by setting the completed date and updating the status with the total number of attendees notified
 
-    except (Exception, psycopg2-binary.DatabaseError) as error:
+    except (Exception, psycopg2.DatabaseError) as error:
         logging.error(error)
     finally:
         # TODO: Close connection

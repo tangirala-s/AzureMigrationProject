@@ -71,20 +71,18 @@ def notification():
             ## TODO: Refactor This logic into an Azure Function
             ## Code below will be replaced by a message queue
             #################################################
-            attendees = Attendee.query.all()
 
-            for attendee in attendees:
-                subject = '{}: {}'.format(attendee.first_name, notification.subject)
-                send_email(attendee.email, subject, notification.message)
+            print('Notification added with subject : {} & message : {}'.format(request.form['subject'],request.form['message']))
 
-            notification.completed_date = datetime.utcnow()
-            notification.status = 'Notified {} attendees'.format(len(attendees))
-            db.session.commit()
+            notification_id = notification.id
+            print('Adding notification : {} to the queue : {}'.format(notification_id, app.config.get('SERVICE_BUS_QUEUE_NAME')))
             # TODO Call servicebus queue_client to enqueue notification ID
-            sb_client = ServiceBusClient.from_connection_string(CONNECTION_STR)
-            queue_client = sb_client.get_queue(QUEUE_NAME)
-            message = Message(str(notification.id))
-            queue_client.send(message)
+
+            sBus_qClient = QueueClient.from_connection_string(app.config.get('SERVICE_BUS_CONNECTION_STRING'), app.config.get('SERVICE_BUS_QUEUE_NAME'))
+            message = Message(str(notification_id))
+            sBus_qClient.send(message)
+
+            print('Notification : {} added to queue : {}'.format(notification_id, app.config.get('SERVICE_BUS_QUEUE_NAME')))
 
             #################################################
             ## END of TODO

@@ -30,5 +30,6 @@
         "venv.bak{,/**}",
         ".vscode{,/**}"
     ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/19c5ef56-6c66-4f9a-bf24-3c59bbbdf9eb/resourceGroups/migration-project-rg/providers/Microsoft.Web/sites/technconf",
     "appService.deploySubpath": "."
 }
